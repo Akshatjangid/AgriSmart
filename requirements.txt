@@ -1,0 +1,16 @@
+streamlit
+scikit-learn
+pandas
+numpy
+matplotlib
+plotly
+tensorflow
+keras
+opencv-python
+Pillow
+requests
+joblib
+seaborn            # for extra charts
+flask              # if using Flask instead of Streamlit
+speechrecognition  # if you want voice input later
+translate          # for Hindi-English text switching
