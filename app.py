@@ -5,6 +5,7 @@ from flask import Flask, request, render_template
 from tensorflow.keras.models import load_model
 from PIL import Image
 import io
+import time 
 
 # --- 1. Initialize App and Define Paths ---
 app = Flask(__name__)
@@ -119,32 +120,29 @@ def predict_crop():
         return render_template('result.html', crop=f"⚠️ Error: {e}")
 
 
+
 @app.route('/predict_disease', methods=['POST'])
 def predict_disease():
-    if not all([disease_model, disease_label_encoder]):
-        return render_template('result.html', disease="⚠️ Error: Disease model not loaded. Check server logs.")
-
+    start_time = time.time()
     try:
-        print("📥 Received file for prediction")
+        print("📥 File received")
         file = request.files.get('leaf_image')
         if not file:
-            print("❌ No file submitted")
-            return render_template('result.html', disease="⚠️ No image file submitted.")
-        
+            return render_template('result.html', disease="⚠️ No image uploaded.")
+
+        # Preprocess
         image = Image.open(io.BytesIO(file.read())).convert('RGB').resize((128, 128))
         image_array = np.array(image) / 255.0
         image_array = np.expand_dims(image_array, axis=0)
 
-        print("🤖 Predicting with disease model...")
+        print("🔄 Running prediction...")
         prediction_array = disease_model.predict(image_array)
-        print("✅ Prediction complete")
+        print(f"✅ Prediction done in {time.time() - start_time:.2f} seconds")
 
         predicted_class_index = np.argmax(prediction_array)
         predicted_label = disease_label_encoder.classes_[predicted_class_index]
-        print(f"🧠 Predicted class: {predicted_label}")
 
         treatment = treatments.get(predicted_label, treatments['default'])
-
         return render_template(
             'result.html',
             disease=predicted_label,
@@ -154,7 +152,6 @@ def predict_disease():
     except Exception as e:
         print("❌ Error during prediction:", str(e))
         return render_template('result.html', disease=f"⚠️ Error: {e}")
-
 
 # --- 6. Run the App ---
 if __name__ == '__main__':
