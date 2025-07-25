@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agriculture Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #4285F4;
+            --text-dark: #202124;
+            --text-light: #3c4043;
+            --border-radius: 24px;
+            --card-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-image: url('https://images.unsplash.com/photo-1499529112087-3cb3b73cec95?q=80&w=1974&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--text-dark);
+            padding: 20px 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; 
+            gap: 30px;
+            min-height: 90vh; 
+        }
+
+        .glass-effect {
+            background-color: rgba(255, 255, 255, 0.7); 
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .top-section {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+        }
+
+        .card {
+            padding: 25px;
+        }
+
+        .time-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .time {
+            font-size: 3rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            line-height: 1.1;
+        }
+
+        .date {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-light);
+        }
+
+        .weather-card {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .weather-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .weather-condition {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .temperature {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .temperature i {
+            font-size: 2rem;
+            margin-right: 5px;
+            color: #ffca28;
+        }
+
+        .weather-details {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background-color: rgba(241, 243, 244, 0.8);
+            padding: 10px 15px;
+            border-radius: 16px;
+        }
+
+        .detail-item i {
+            color: var(--primary-blue);
+            font-size: 1.2rem;
+        }
+
+        .detail-label {
+            font-weight: 500;
+            flex-grow: 1;
+        }
+
+        .detail-value {
+            font-weight: 600;
+        }
+
+        .humidity-bar {
+            width: 100%;
+            height: 8px;
+            background-color: rgba(224, 224, 224, 0.7);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .humidity-level {
+            width: 69%;
+            height: 100%;
+            background-color: var(--primary-blue);
+            border-radius: 4px;
+        }
+
+        .bottom-section {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .action-button {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            text-decoration: none;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            text-align: center;
+        }
+
+        .action-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .action-button img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+        }
+
+        .action-button span {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Top Section: Time and Weather -->
+        <div class="top-section">
+            <div class="card time-card glass-effect">
+                <div id="time" class="time">12:00</div>
+                <div id="date" class="date">Thu, Jul 24</div>
+            </div>
+            <div class="card weather-card glass-effect">
+                <div class="weather-header">
+                    <span class="weather-condition">Mist</span>
+                    <div class="temperature">
+                        <i class="fa-solid fa-cloud-sun"></i>
+                        <span>32<small>°C</small></span>
+                    </div>
+                </div>
+
+                <div class="weather-details">
+                    <div class="detail-item">
+                        <i class="fa-solid fa-droplet"></i>
+                        <span class="detail-label">Humidity</span>
+                        <div class="humidity-bar">
+                           <div class="humidity-level"></div>
+                        </div>
+                        <span class="detail-value">69%</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fa-solid fa-temperature-three-quarters"></i>
+                        <span class="detail-label">Feels Like</span>
+                        <span class="detail-value">38.4<small>°C</small></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Section: Action Buttons -->
+        <div class="bottom-section">
+            <a href="/crop_form" class="action-button glass-effect">
+                <img src="https://cdn-icons-png.flaticon.com/512/2317/2317973.png" alt="Crop Icon" onerror="this.onerror=null;this.src='https://placehold.co/60x60/e0eaff/333?text=Crop';">
+                <span>Crop Recommendation</span>
+            </a>
+            <a href="/disease_form" class="action-button glass-effect">
+                <img src="https://cdn-icons-png.flaticon.com/512/3094/3094537.png" alt="Disease Icon" onerror="this.onerror=null;this.src='https://placehold.co/60x60/e0eaff/333?text=Disease';">
+                <span>Disease Detector</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function updateTime() {
+            const now = new Date();
+            const timeEl = document.getElementById('time');
+            const dateEl = document.getElementById('date');
+
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            timeEl.textContent = `${hours}:${minutes}`;
+
+            const dateOptions = { weekday: 'short', month: 'short', day: 'numeric' };
+            dateEl.textContent = now.toLocaleDateString('en-US', dateOptions);
+        }
+
+        updateTime();
+        setInterval(updateTime, 1000);
+    </script>
+
+</body>
+</html>

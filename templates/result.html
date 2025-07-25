@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #4285F4;
+            --text-dark: #202124;
+            --border-radius: 24px;
+            --card-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-image: url('https://images.unsplash.com/photo-1499529112087-3cb3b73cec95?q=80&w=1974&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--text-dark);
+        }
+        .result-container {
+            width: 100%;
+            max-width: 600px;
+            padding: 40px;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        h1 {
+            font-weight: 600;
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+        }
+        h2 {
+            font-weight: 500;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+        .result-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2a7d2e;
+        }
+        .treatment-text {
+            text-align: left;
+            padding: 15px;
+            background-color: rgba(241, 243, 244, 0.8);
+            border-radius: 12px;
+            margin-top: 5px;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 12px;
+            background-color: var(--primary-blue);
+            color: white;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        .back-btn:hover {
+            background-color: #3367d6;
+        }
+        .error {
+            color: #d93025;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="result-container">
+        <h1>Prediction Result</h1>
+
+        {% if crop %}
+            <h2>Recommended Crop is:</h2>
+            <p class="result-text">{{ crop }}</p>
+            {% if 'Error' in crop %}
+                <p class="error">Please go back and enter valid data.</p>
+            {% endif %}
+        {% endif %}
+
+        {% if disease %}
+            <h2>Detected Disease is:</h2>
+            <p class="result-text">{{ disease }}</p>
+            
+            {% if 'Error' not in disease %}
+                <h2>Treatment (English)</h2>
+                <p class="treatment-text">{{ treatment_en }}</p>
+                
+                <h2>इलाज (हिन्दी)</h2>
+                <p class="treatment-text">{{ treatment_hi }}</p>
+            {% else %}
+                <p class="error">Please go back and upload a valid image file.</p>
+            {% endif %}
+        {% endif %}
+
+        <a href="/" class="back-btn">Go Back to Home</a>
+    </div>
+</body>
+</html>
