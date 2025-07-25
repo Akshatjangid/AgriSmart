@@ -11,7 +11,7 @@ app = Flask(__name__)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 CROP_MODEL_PATH = os.path.join(BASE_DIR, 'crop_model.pkl')
 CROP_ENCODER_PATH = os.path.join(BASE_DIR, 'label_encoder.pkl')
-DISEASE_MODEL_PATH = os.path.join(BASE_DIR, 'disease_model.keras')
+DISEASE_MODEL_PATH = os.path.join(BASE_DIR, 'disease_model.h5')
 DISEASE_ENCODER_PATH = os.path.join(BASE_DIR, 'disease_label_encoder.pkl')
 
 # --- 2. Load Models ---
@@ -123,29 +123,36 @@ def predict_crop():
 def predict_disease():
     if not all([disease_model, disease_label_encoder]):
         return render_template('result.html', disease="⚠️ Error: Disease model not loaded. Check server logs.")
+
     try:
+        print("📥 Received file for prediction")
         file = request.files.get('leaf_image')
         if not file:
+            print("❌ No file submitted")
             return render_template('result.html', disease="⚠️ No image file submitted.")
         
         image = Image.open(io.BytesIO(file.read())).convert('RGB').resize((128, 128))
         image_array = np.array(image) / 255.0
         image_array = np.expand_dims(image_array, axis=0)
-        
+
+        print("🤖 Predicting with disease model...")
         prediction_array = disease_model.predict(image_array)
+        print("✅ Prediction complete")
+
         predicted_class_index = np.argmax(prediction_array)
         predicted_label = disease_label_encoder.classes_[predicted_class_index]
+        print(f"🧠 Predicted class: {predicted_label}")
 
-        # Get the treatment information for the predicted disease
         treatment = treatments.get(predicted_label, treatments['default'])
-        
+
         return render_template(
-            'result.html', 
+            'result.html',
             disease=predicted_label,
             treatment_en=treatment['en'],
             treatment_hi=treatment['hi']
         )
     except Exception as e:
+        print("❌ Error during prediction:", str(e))
         return render_template('result.html', disease=f"⚠️ Error: {e}")
 
 
