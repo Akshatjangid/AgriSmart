@@ -17,6 +17,14 @@ DISEASE_ENCODER_PATH = os.path.join(BASE_DIR, 'disease_label_encoder.pkl')
 
 # --- 2. Load Models ---
 try:
+    print("Loading disease model...")
+    disease_model = load_model("disease_model.h5")
+    print("✅ Disease model loaded")
+except Exception as e:
+    print(f"❌ Error loading disease model: {e}")
+    disease_model = None
+
+try:
     print("Loading crop model...")
     crop_model = joblib.load(CROP_MODEL_PATH)
     print("Loading crop label encoder...")
