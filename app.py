@@ -5,7 +5,7 @@ from flask import Flask, request, render_template
 from tensorflow.keras.models import load_model
 from PIL import Image
 import io
-import time 
+import time
 
 # --- 1. Initialize App and Define Paths ---
 app = Flask(__name__)
@@ -16,8 +16,6 @@ DISEASE_MODEL_PATH = os.path.join(BASE_DIR, 'disease_model.h5')
 DISEASE_ENCODER_PATH = os.path.join(BASE_DIR, 'disease_label_encoder.pkl')
 
 # --- 2. Load Models ---
-
-
 try:
     print("Loading crop model...")
     crop_model = joblib.load(CROP_MODEL_PATH)
@@ -37,7 +35,6 @@ except Exception as e:
     crop_model, crop_label_encoder, disease_model, disease_label_encoder = None, None, None, None
 
 # --- 3. Treatment Dictionary ---
-# Comprehensive list of treatments for all diseases
 treatments = {
     "Pepper_bell__Bacterial_spot": {
         "en": "Use copper-based fungicides. Remove and destroy infected plants. Avoid overhead watering.",
@@ -140,7 +137,8 @@ def predict_disease():
         print("🔄 Running prediction...")
         prediction_array = disease_model.predict(image_array)
         print(f"✅ Prediction done in {time.time() - start_time:.2f} seconds")
-
+        
+        # This is the correct, final implementation that prevents the "not iterable" error.
         predicted_class_index = np.argmax(prediction_array)
         predicted_label = disease_label_encoder.classes_[predicted_class_index]
 
@@ -156,7 +154,5 @@ def predict_disease():
         return render_template('result.html', disease=f"⚠️ Error: {e}")
 
 # --- 6. Run the App ---
-# if __name__ == '__main__':
-#     app.run(debug=True)
-if __name__ == "__main__":
-    app.run(debug=False, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+if __name__ == '__main__':
+    app.run(debug=True)
